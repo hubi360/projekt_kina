@@ -4,17 +4,17 @@ import requests
 import tkintermapview
 from bs4 import BeautifulSoup
 
-# ustawienia
+# Ustawenia
 kina = []
 zalogowany = False
 
 class Kino:
-    def __init__(self, nazwa, lokalizacja, pracownicy):
+    def __init__(self, nazwa, lokalizacja, filmy=None):
         self.nazwa = nazwa
         self.lokalizacja = lokalizacja
-        self.pracownicy = pracownicy
         self.wspolrzedne = self.pobierz_wspolrzedne()
-        self.marker = map_widget.set_marker(self.wspolrzedne[0], self.wspolrzedne[1], text=f"{self.nazwa} ({self.pracownicy} pracowników)")
+        self.marker = map_widget.set_marker(self.wspolrzedne[0], self.wspolrzedne[1], text=self.nazwa)
+        self.filmy = filmy if filmy else []
 
     def pobierz_wspolrzedne(self):
         url = f'https://pl.wikipedia.org/wiki/{self.lokalizacja}'
@@ -27,31 +27,32 @@ class Kino:
 
 def dodaj_poczatkowe_kina():
     poczatkowe_kina = [
-        {"nazwa": "Kino Pieroga", "lokalizacja": "Warszawa", "pracownicy": 13},
-        {"nazwa": "Kino Cebularz", "lokalizacja": "Lublin", "pracownicy": 6},
-        {"nazwa": "Kino Obwarzanek", "lokalizacja": "Kraków", "pracownicy": 10},
-        {"nazwa": "Kino Krasnoludek", "lokalizacja": "Wrocław", "pracownicy": 7}
+        {"nazwa": "Kino Pieroga", "lokalizacja": "Warszawa", "filmy": ["Mission: Impossible II", "Goldfinger", "Szklana pułapka"]},
+        {"nazwa": "Kino Cebularz", "lokalizacja": "Lublin", "filmy": ["Star Trek", "Star Wars", "Gwiezdne wrota"]},
+        {"nazwa": "Kino Obwarzanek", "lokalizacja": "Kraków", "filmy": ["Romeo i Julia", "One Day", "Zmierzch"]},
+        {"nazwa": "Kino Krasnoludek", "lokalizacja": "Wrocław", "filmy": ["Smerfy", "Królowa Śniegu", "Shrek"]}
     ]
     for kino in poczatkowe_kina:
-        nowe_kino = Kino(kino["nazwa"], kino["lokalizacja"], kino["pracownicy"])
+        nowe_kino = Kino(kino["nazwa"], kino["lokalizacja"], kino["filmy"])
         kina.append(nowe_kino)
     lista_kin()
+
 
 def lista_kin():
     listbox_lista_kin.delete(0, END)
     for idx, kino in enumerate(kina):
-        listbox_lista_kin.insert(idx, f'{kino.nazwa} {kino.lokalizacja} ({kino.pracownicy} pracowników)')
+        listbox_lista_kin.insert(idx, f'{kino.nazwa} {kino.lokalizacja}')
 
 def dodaj_kino():
     nazwa = entry_nazwa.get()
     lokalizacja = entry_lokalizacja.get()
-    pracownicy = int(entry_pracownicy.get())
-    nowe_kino = Kino(nazwa, lokalizacja, pracownicy)
+    filmy = entry_filmy.get().split(", ")
+    nowe_kino = Kino(nazwa, lokalizacja, filmy)
     kina.append(nowe_kino)
     lista_kin()
     entry_nazwa.delete(0, END)
     entry_lokalizacja.delete(0, END)
-    entry_pracownicy.delete(0, END)
+    entry_filmy.delete(0, END)
     entry_nazwa.focus()
 
 def usun_kino():
@@ -65,11 +66,11 @@ def pokaz_szczegoly_kina():
     nazwa = kina[i].nazwa
     lokalizacja = kina[i].lokalizacja
     wspolrzedne = kina[i].wspolrzedne
-    pracownicy = kina[i].pracownicy
+    filmy = ", ".join(kina[i].filmy)
     label_nazwa_szczegoly_kina_wartosc.config(text=nazwa)
     label_lokalizacja_szczegoly_kina_wartosc.config(text=lokalizacja)
     label_wspolrzedne_szczegoly_kina_wartosc.config(text=f"{wspolrzedne[0]:.2f}, {wspolrzedne[1]:.2f}")
-    label_pracownicy_szczegoly_kina_wartosc.config(text=pracownicy)
+    label_filmy_szczegoly_kina_wartosc.config(text=filmy)
     map_widget.set_position(wspolrzedne[0], wspolrzedne[1])
     map_widget.set_zoom(12)
 
@@ -77,22 +78,30 @@ def edytuj_kino():
     i = listbox_lista_kin.index(ACTIVE)
     entry_nazwa.insert(0, kina[i].nazwa)
     entry_lokalizacja.insert(0, kina[i].lokalizacja)
-    entry_pracownicy.insert(0, kina[i].pracownicy)
+    entry_filmy.insert(0, ", ".join(kina[i].filmy))
     button_dodaj_kino.config(text="Zapisz zmiany", command=lambda: aktualizuj_kino(i))
 
 def aktualizuj_kino(i):
     kina[i].nazwa = entry_nazwa.get()
     kina[i].lokalizacja = entry_lokalizacja.get()
-    kina[i].pracownicy = int(entry_pracownicy.get())
+    kina[i].filmy = entry_filmy.get().split(", ")
     kina[i].wspolrzedne = kina[i].pobierz_wspolrzedne()
     kina[i].marker.delete()
-    kina[i].marker = map_widget.set_marker(kina[i].wspolrzedne[0], kina[i].wspolrzedne[1], text=f"{kina[i].nazwa} ({kina[i].pracownicy} pracowników)")
+    kina[i].marker = map_widget.set_marker(kina[i].wspolrzedne[0], kina[i].wspolrzedne[1], text=kina[i].nazwa)
     lista_kin()
     button_dodaj_kino.config(text="Dodaj kino", command=dodaj_kino)
     entry_nazwa.delete(0, END)
     entry_lokalizacja.delete(0, END)
-    entry_pracownicy.delete(0, END)
+    entry_filmy.delete(0, END)
     entry_nazwa.focus()
+
+def generuj_mape_dla_filmu():
+    film = entry_szukaj_film.get()
+    map_widget.delete_all_marker()
+    for kino in kina:
+        if film in kino.filmy:
+            map_widget.set_marker(kino.wspolrzedne[0], kino.wspolrzedne[1], text=kino.nazwa)
+    map_widget.set_zoom(8)
 
 def logowanie():
     global zalogowany
@@ -107,13 +116,12 @@ def logowanie():
         messagebox.showerror("Błąd logowania", "Niepoprawna nazwa użytkownika lub hasło")
 
 
-
 # GUI
 root = Tk()
 root.title("MapBook")
-root.geometry("1100x900")
+root.geometry("1300x900")
 
-# Login ramkaa
+# ramka logowania
 login_frame = Frame(root)
 label_nazwa_uzytkownika = Label(login_frame, text="Nazwa użytkownika:")
 entry_nazwa_uzytkownika = Entry(login_frame)
@@ -129,20 +137,22 @@ button_login.grid(row=7, column=5, columnspan=2)
 
 login_frame.grid(row=5, column=5, padx=400, pady=100)
 
-#Główna ramkkaa
+# Main ramki
 main_frame = Frame(root)
 main_frame.grid_forget()
 
-# ramka do organizowania struktury
+#struktura ramki
 ramka_lista_kin = Frame(main_frame)
 ramka_formularz = Frame(main_frame)
 ramka_szczegoly_kina = Frame(main_frame)
+ramka_szukaj_film = Frame(main_frame)
 
 ramka_lista_kin.grid(row=0, column=0, padx=50)
 ramka_formularz.grid(row=0, column=1)
 ramka_szczegoly_kina.grid(row=1, column=0, columnspan=2, padx=50, pady=20)
+ramka_szukaj_film.grid(row=2, column=0, columnspan=2, padx=50, pady=20)
 
-# lista kin
+#lista kina
 label_lista_kin = Label(ramka_lista_kin, text="Lista kin: ")
 listbox_lista_kin = Listbox(ramka_lista_kin, width=50)
 button_pokaz_szczegoly = Button(ramka_lista_kin, text="Pokaż szczegóły", command=pokaz_szczegoly_kina)
@@ -155,39 +165,40 @@ button_pokaz_szczegoly.grid(row=2, column=0)
 button_usun_kino.grid(row=2, column=1)
 button_edytuj_kino.grid(row=2, column=2)
 
-# formularz
+
+#Formularz
 label_formularz = Label(ramka_formularz, text="Formularz")
 label_nazwa = Label(ramka_formularz, text="Nazwa kina: ")
 label_lokalizacja = Label(ramka_formularz, text="Lokalizacja kina: ")
-label_pracownicy = Label(ramka_formularz, text="Liczba pracowników: ")
+label_filmy = Label(ramka_formularz, text="Filmy: ")
 
 entry_nazwa = Entry(ramka_formularz)
 entry_lokalizacja = Entry(ramka_formularz)
-entry_pracownicy = Entry(ramka_formularz)
+entry_filmy = Entry(ramka_formularz)
 
 label_formularz.grid(row=0, column=0, columnspan=2)
 label_nazwa.grid(row=1, column=0, sticky=W)
 label_lokalizacja.grid(row=2, column=0, sticky=W)
-label_pracownicy.grid(row=3, column=0, sticky=W)
+label_filmy.grid(row=3, column=0, sticky=W)
 
 entry_nazwa.grid(row=1, column=1)
 entry_lokalizacja.grid(row=2, column=1)
-entry_pracownicy.grid(row=3, column=1)
+entry_filmy.grid(row=3, column=1)
 
 button_dodaj_kino = Button(ramka_formularz, text="Dodaj kino", command=dodaj_kino)
 button_dodaj_kino.grid(row=4, column=1, columnspan=2)
 
-# szczegóły kin
+#Detale
 label_szczegoly_kina = Label(ramka_szczegoly_kina, text="Szczegóły kina: ")
 label_nazwa_szczegoly_kina = Label(ramka_szczegoly_kina, text="Nazwa: ")
 label_lokalizacja_szczegoly_kina = Label(ramka_szczegoly_kina, text="Lokalizacja: ")
 label_wspolrzedne_szczegoly_kina = Label(ramka_szczegoly_kina, text="Współrzędne: ")
-label_pracownicy_szczegoly_kina = Label(ramka_szczegoly_kina, text="Liczba pracowników: ")
+label_filmy_szczegoly_kina = Label(ramka_szczegoly_kina, text="Filmy: ")
 
 label_nazwa_szczegoly_kina_wartosc = Label(ramka_szczegoly_kina, text="...", width=30)
 label_lokalizacja_szczegoly_kina_wartosc = Label(ramka_szczegoly_kina, text="...", width=20)
 label_wspolrzedne_szczegoly_kina_wartosc = Label(ramka_szczegoly_kina, text="...", width=20)
-label_pracownicy_szczegoly_kina_wartosc = Label(ramka_szczegoly_kina, text="...", width=20)
+label_filmy_szczegoly_kina_wartosc = Label(ramka_szczegoly_kina, text="...", width=50)
 
 label_szczegoly_kina.grid(row=0, column=0, sticky=W)
 label_nazwa_szczegoly_kina.grid(row=1, column=0, sticky=W)
@@ -196,8 +207,17 @@ label_lokalizacja_szczegoly_kina.grid(row=1, column=2)
 label_lokalizacja_szczegoly_kina_wartosc.grid(row=1, column=3)
 label_wspolrzedne_szczegoly_kina.grid(row=1, column=4)
 label_wspolrzedne_szczegoly_kina_wartosc.grid(row=1, column=5)
-label_pracownicy_szczegoly_kina.grid(row=1, column=6)
-label_pracownicy_szczegoly_kina_wartosc.grid(row=1, column=7)
+label_filmy_szczegoly_kina.grid(row=1, column=6)
+label_filmy_szczegoly_kina_wartosc.grid(row=1, column=7)
+
+#Wyszukiwanie filmow
+label_szukaj_film = Label(ramka_szukaj_film, text="Wyszukaj film: ")
+entry_szukaj_film = Entry(ramka_szukaj_film)
+button_szukaj_film = Button(ramka_szukaj_film, text="Generuj mapę", command=generuj_mape_dla_filmu)
+
+label_szukaj_film.grid(row=0, column=0, sticky=W)
+entry_szukaj_film.grid(row=0, column=1)
+button_szukaj_film.grid(row=0, column=2)
 
 map_widget = tkintermapview.TkinterMapView(ramka_szczegoly_kina, width=900, height=500)
 map_widget.set_position(52.2, 21.0)
