@@ -25,6 +25,7 @@ class Kino:
             float(response_html.select('.longitude')[1].text.replace(",", "."))
         ]
 
+
 def dodaj_poczatkowe_kina():
     poczatkowe_kina = [
         {"nazwa": "Kino Pieroga", "lokalizacja": "Warszawa", "filmy": ["Mission: Impossible II", "Goldfinger", "Szklana pułapka"]},
