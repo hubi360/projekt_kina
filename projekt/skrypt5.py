@@ -114,6 +114,7 @@ def dodaj_poczatkowe_kina():
         kina.append(nowe_kino)
     lista_kin()
 
+
 # GUI
 root = Tk()
 root.title("MapBook")
