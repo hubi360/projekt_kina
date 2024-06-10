@@ -25,6 +25,18 @@ class Kino:
             float(response_html.select('.longitude')[1].text.replace(",", "."))
         ]
 
+def dodaj_poczatkowe_kina():
+    poczatkowe_kina = [
+        {"nazwa": "Kino Pieroga", "lokalizacja": "Warszawa", "pracownicy": 13},
+        {"nazwa": "Kino Cebularz", "lokalizacja": "Lublin", "pracownicy": 6},
+        {"nazwa": "Kino Obwarzanek", "lokalizacja": "Kraków", "pracownicy": 10},
+        {"nazwa": "Kino Krasnoludek", "lokalizacja": "Wrocław", "pracownicy": 7}
+    ]
+    for kino in poczatkowe_kina:
+        nowe_kino = Kino(kino["nazwa"], kino["lokalizacja"], kino["pracownicy"])
+        kina.append(nowe_kino)
+    lista_kin()
+
 def lista_kin():
     listbox_lista_kin.delete(0, END)
     for idx, kino in enumerate(kina):
@@ -94,17 +106,7 @@ def logowanie():
     else:
         messagebox.showerror("Błąd logowania", "Niepoprawna nazwa użytkownika lub hasło")
 
-def dodaj_poczatkowe_kina():
-    poczatkowe_kina = [
-        {"nazwa": "Kino Pieroga", "lokalizacja": "Warszawa", "pracownicy": 13},
-        {"nazwa": "Kino Cebularz", "lokalizacja": "Lublin", "pracownicy": 6},
-        {"nazwa": "Kino Obwarzanek", "lokalizacja": "Kraków", "pracownicy": 10},
-        {"nazwa": "Kino Krasnoludek", "lokalizacja": "Wrocław", "pracownicy": 7}
-    ]
-    for kino in poczatkowe_kina:
-        nowe_kino = Kino(kino["nazwa"], kino["lokalizacja"], kino["pracownicy"])
-        kina.append(nowe_kino)
-    lista_kin()
+
 
 # GUI
 root = Tk()
