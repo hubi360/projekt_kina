@@ -165,6 +165,7 @@ button_pokaz_szczegoly.grid(row=2, column=0)
 button_usun_kino.grid(row=2, column=1)
 button_edytuj_kino.grid(row=2, column=2)
 
+
 #Formularz
 label_formularz = Label(ramka_formularz, text="Formularz")
 label_nazwa = Label(ramka_formularz, text="Nazwa kina: ")
