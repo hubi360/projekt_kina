@@ -1,6 +1,7 @@
 # projekt_kina
 Projekt systemu do zarządzania kinami
 
+Zadanie projktowe:
 CRUD: 
 GUI:   
 - Logowanie do systemu
@@ -19,4 +20,7 @@ GUI:
 - Generowanie mapy kin w którym grają wybrany film
 - Generowanie mapy filmów wg. ich typu
 
+Zotsały napisane 5 skryptów:
+Każdy skrypt zawiera GUI: logowanie do systemu
+Kazdy skrypt generuje innego CRUDA i inną mape
 
