@@ -21,6 +21,6 @@ GUI:
 - Generowanie mapy filmów wg. ich typu
 
 Zotsały napisane 5 skryptów:
-Każdy skrypt zawiera GUI: logowanie do systemu
-Kazdy skrypt generuje innego CRUDA i inną mape
+- Każdy skrypt zawiera GUI: logowanie do systemu
+- Kazdy skrypt generuje innego CRUDA i inną mape
 
