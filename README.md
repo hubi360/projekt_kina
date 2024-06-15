@@ -30,3 +30,4 @@ Praca programu:
 ![Praca_programu_5](https://github.com/hubi360/projekt_kina/assets/163434837/2e7cbc19-a0d2-4748-8459-9955c366dcbe)
 ![Praca_programu_2](https://github.com/hubi360/projekt_kina/assets/163434837/dc55fd08-73d8-42f7-83e3-e61fd22249af)
 
+Po uruchomieniu kodu pojawia się okno logowania (rysunek 1), w którym należy wprowadzić dane logowania: nazwa użytkownika (admin) i hasło (admin). Po zalogowaniu wyświetla się system zarządzania kinami (rysunek 2). W interfejsie GUI znajdują się cztery zakładki (Kina, Pracownicy, Filmy i Typy filmów), a po kliknięciu na jedną z nich pojawia się ramka z trzema sekcjami: w lewym rogu lista danych, w prawym rogu formularz, poniżej formularza szczegóły danych, a pod szczegółami interaktywna mapa.
