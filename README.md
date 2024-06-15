@@ -20,5 +20,6 @@ GUI:
 - Generowanie mapy kin w którym grają wybrany film
 - Generowanie mapy filmów wg. ich typu
 
-Został napisany skrypt system_zarzadzania_kinami, który po włączeniu jest GUI: logowanie do systemu, apo zalogowaniu GUI: CRUD i Geo
+Został napisany skrypt system_zarzadzania_kinami, który po włączeniu jest GUI: logowanie do systemu, 
+a po zalogowaniu GUI: CRUD i Geo
 
