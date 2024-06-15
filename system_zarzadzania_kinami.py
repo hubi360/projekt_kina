@@ -781,7 +781,6 @@ label_lokalizacja_typu.grid(row=5, column=0, padx=10, pady=5)
 entry_lokalizacja_typu.grid(row=5, column=1, padx=10, pady=5)
 button_dodaj_typ.grid(row=6, column=1, padx=10, pady=5)
 
-
 #Wyświetlenie szczegółów wybranego gratunku filmu w ramce - ramka_szczegoly
 #Etykiety
 label_szczegoly_typu = tk.Label(ramka_szczegoly_typ, text="Szczegóły typu filmu")
