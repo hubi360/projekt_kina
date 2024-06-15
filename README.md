@@ -23,3 +23,6 @@ GUI:
 Został napisany skrypt system_zarzadzania_kinami, który po włączeniu jest GUI: logowanie do systemu, 
 a po zalogowaniu GUI: CRUD i Geo
 
+Praca programu:
+![Praca_programu_1](https://github.com/hubi360/projekt_kina/assets/163434837/688f5108-f8e7-4690-8b68-a58f10d84842)
+
